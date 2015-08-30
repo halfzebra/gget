@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/halfzebra/gget.svg?branch=master)](https://travis-ci.org/halfzebra/gget)
-
-# gget
+# GGET [![npm version](https://badge.fury.io/js/gget.svg)](http://badge.fury.io/js/gget) [![Build Status](https://travis-ci.org/halfzebra/gget.svg?branch=master)](https://travis-ci.org/halfzebra/gget)
 
 A module for Express.js that provides a middleware for grouping multiple GET requests to API and retrieve the response simultaneously.
 

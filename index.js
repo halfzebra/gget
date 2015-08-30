@@ -1,6 +1,10 @@
 var http  = require('http'),
     async = require('async');
 
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
+
 /**
  * Prepares a request for a single API call.
  *
@@ -33,7 +37,14 @@ function prepareReq(key, path, port) {
       });
 
       response.on('end', function () {
-        res[key] = apiRes;
+
+        // Calls to non-existing APIs will result in null as result.
+        if (response.statusCode === 404) {
+          res[key] = null
+        } else {
+          res[key] = apiRes;
+        }
+
         callback(null, res);
       });
 
@@ -82,23 +93,28 @@ module.exports = function(port) {
         calls = [],
         path = '';
 
-    // Loop through GET parameters and extract parameter names and API paths.
-    for (var param in reqQuery) {
+    if (!isEmpty(reqQuery)) {
 
-      path = '/' + reqQuery[param];
+      // Loop through GET parameters and extract parameter names and API paths.
+      for (var param in reqQuery) {
 
-      calls.push(prepareReq(param, path, port));
-    }
+        path = '/' + reqQuery[param];
 
-    // Send the parallel requests to the server and send a response.
-    async.parallel(calls, function (err, results) {
-
-      if (err !== null) {
-        res.send(err);
-      } else {
-
-        res.json(prepareRes(results));
+        calls.push(prepareReq(param, path, port));
       }
-    });
+
+      // Send the parallel requests to the server and send a response.
+      async.parallel(calls, function (err, results) {
+
+        if (err !== null) {
+          res.send(err);
+        } else {
+
+          res.json(prepareRes(results));
+        }
+      });
+    } else {
+      res.status(500).send('A call to ' + req.originalUrl + ' requires GET parameters to be specified.');
+    }
   }
 };
