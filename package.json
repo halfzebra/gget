@@ -3,7 +3,7 @@
   "version": "1.0.4",
   "description": "Express.js module for grouping GET requests to API.",
   "main": "index.js",
-  "author": "halfzebra <duardeco@gmail.com>",
+  "author": "Eduard Kyvenko <eduard.kyvenko@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "async": "^1.4.2",
